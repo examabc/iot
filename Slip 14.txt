@@ -1,0 +1,196 @@
+Slip 14 :
+
+Q.1	Write a Java Program to implement Command Design Pattern for Command Interface with execute() . Use this to create variety of commands for LightOnCommand, LightOffCommand, GarageDoorUpCommand, StereoOnWithCDComman.
+
+
+
+1.	Command Interface
+
+java Copy code
+// Command Interface public interface Command {
+void execute();
+}
+ 
+2.	Receiver Classes
+
+java
+Copy code
+// Light Class (Receiver) public class Light {
+public void on() { System.out.println("Light is ON");
+}
+
+public void off() { System.out.println("Light is OFF");
+}
+}
+
+// GarageDoor Class (Receiver) public class GarageDoor {
+public void up() { System.out.println("Garage Door is UP");
+}
+
+public void down() { System.out.println("Garage Door is DOWN");
+}
+}
+
+// Stereo Class (Receiver) public class Stereo {
+public void on() { System.out.println("Stereo is ON");
+}
+
+public void off() { System.out.println("Stereo is OFF");
+}
+
+public void setCD() {
+System.out.println("CD is set in Stereo");
+}
+
+public void setVolume(int volume) { System.out.println("Stereo volume is set to " + volume);
+}
+}
+
+3.	Concrete Command Classes
+
+java
+Copy code
+// LightOnCommand (Concrete Command)
+public class LightOnCommand implements Command { private Light light;
+
+public LightOnCommand(Light light) { this.light = light;
+}
+ 
+@Override
+public void execute() { light.on();
+}
+}
+
+// LightOffCommand (Concrete Command)
+public class LightOffCommand implements Command { private Light light;
+
+public LightOffCommand(Light light) { this.light = light;
+}
+
+@Override
+public void execute() { light.off();
+}
+}
+
+// GarageDoorUpCommand (Concrete Command)
+public class GarageDoorUpCommand implements Command { private GarageDoor garageDoor;
+
+public GarageDoorUpCommand(GarageDoor garageDoor) { this.garageDoor = garageDoor;
+}
+
+@Override
+public void execute() { garageDoor.up();
+}
+}
+
+// StereoOnWithCDCommand (Concrete Command)
+public class StereoOnWithCDCommand implements Command { private Stereo stereo;
+
+public StereoOnWithCDCommand(Stereo stereo) { this.stereo = stereo;
+}
+
+@Override
+public void execute() { stereo.on(); stereo.setCD();
+stereo.setVolume(11); // Setting a default volume level
+}
+}
+
+4.	The Remote Control (Invoker)
+
+java
+Copy code
+// RemoteControl Class (Invoker)
+ 
+public class RemoteControl { private Command[] commands;
+
+public RemoteControl() {
+commands = new Command[4]; // You can add more commands here
+}
+
+// Set the command at a specific position
+public void setCommand(int slot, Command command) { commands[slot] = command;
+}
+
+// Press the button to execute the command public void pressButton(int slot) {
+commands[slot].execute();
+}
+}
+
+5.	Main Class to Test the Command Pattern
+
+java
+Copy code
+public class CommandPatternTest {
+public static void main(String[] args) {
+// Creating receivers
+Light livingRoomLight = new Light(); GarageDoor garageDoor = new GarageDoor(); Stereo stereo = new Stereo();
+
+// Creating concrete commands
+Command lightOn = new LightOnCommand(livingRoomLight); Command lightOff = new LightOffCommand(livingRoomLight); Command garageDoorUp = new GarageDoorUpCommand(garageDoor); Command stereoOnWithCD = new StereoOnWithCDCommand(stereo);
+
+// Creating the remote control (Invoker) RemoteControl remote = new RemoteControl();
+
+// Setting commands to the remote control remote.setCommand(0, lightOn); remote.setCommand(1, lightOff); remote.setCommand(2, garageDoorUp); remote.setCommand(3, stereoOnWithCD);
+
+// Pressing the buttons to execute the commands System.out.println("Pressing button 0 (Light On):"); remote.pressButton(0);
+
+System.out.println("\nPressing button 1 (Light Off):"); remote.pressButton(1);
+
+System.out.println("\nPressing button 2 (Garage Door Up):"); remote.pressButton(2);
+
+System.out.println("\nPressing button 3 (Stereo On with CD):"); remote.pressButton(3);
+ 
+}
+}
+
+Explanation:
+
+1.	Command Interface: Defines the execute() method which will be implemented by all concrete command classes.
+2.	Receiver Classes: The Light, GarageDoor, and Stereo classes represent the devices being controlled. They perform the actions when their corresponding commands are executed.
+3.	Concrete Command Classes: These implement the Command interface and delegate the action to the appropriate method in the receiver class. For
+example, LightOnCommand calls the on() method of the Light class.
+4.	Invoker: The RemoteControl class holds a list of commands and can execute the appropriate command when the button is pressed. The setCommand() method binds a command to a button, and pressButton() executes the command.
+5.	Main: In the CommandPatternTest class, we create instances of receivers and commands, set them in the remote control, and then simulate pressing buttons on the remote control to execute various actions.
+
+Output:
+
+vbnet Copy code
+Pressing button 0 (Light On):
+Light is ON
+
+Pressing button 1 (Light Off):
+Light is OFF
+
+Pressing button 2 (Garage Door Up):
+Garage Door is UP
+
+Pressing button 3 (Stereo On with CD):
+Stereo is ON
+CD is set in Stereo Stereo volume is set to 11
+
+Q.2	Write a program to detects the vibration of an object with sensor using Arduino. #define VIBRATION_SENSOR_PIN 8 // Pin for vibration sensor
+#define LED_PIN 13	// Pin for LED (optional)
+
+void setup() {
+// Initialize the vibration sensor pin as input pinMode(VIBRATION_SENSOR_PIN, INPUT);
+ 
+
+// Initialize the LED pin as output pinMode(LED_PIN, OUTPUT);
+
+// Start the Serial Monitor Serial.begin(9600);
+}
+
+void loop() {
+// Read the state of the vibration sensor
+int sensorState = digitalRead(VIBRATION_SENSOR_PIN);
+
+// Check if vibration is detected
+if (sensorState == LOW) { // Sensor output LOW indicates vibration detected Serial.println("Vibration Detected!");
+digitalWrite(LED_PIN, HIGH); // Turn on LED (if connected) delay(200); // Keep LED on for 200ms digitalWrite(LED_PIN, LOW); // Turn off LED
+} else {
+Serial.println("No Vibration");
+}
+
+// Delay before the next reading
+delay(100); // Delay for 100ms before checking again
+}

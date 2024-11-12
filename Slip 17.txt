@@ -1,0 +1,162 @@
+Slip 17 :
+
+Q.1	Write a Java Program to implement Abstract Factory Pattern for Shape interface.
+
+
+Code Implementation:
+
+1.	Shape Interface
+
+java
+Copy code
+// Abstract Product: Shape interface public interface Shape {
+void draw();
+}
+ 
+2.	Concrete Products (Circle, Square, Rectangle)
+
+java
+Copy code
+// Concrete Product: Circle
+public class Circle implements Shape { @Override
+public void draw() { System.out.println("Drawing a Circle");
+}
+}
+
+// Concrete Product: Square
+public class Square implements Shape { @Override
+public void draw() { System.out.println("Drawing a Square");
+}
+}
+
+// Concrete Product: Rectangle
+public class Rectangle implements Shape { @Override
+public void draw() { System.out.println("Drawing a Rectangle");
+}
+}
+
+3.	Abstract Factory
+
+java
+Copy code
+// Abstract Factory: ShapeFactory public interface ShapeFactory {
+Shape createShape(String shapeType);
+}
+
+4.	Concrete Factories (2D and 3D)
+
+java
+Copy code
+// Concrete Factory: 2DShapeFactory
+public class TwoDShapeFactory implements ShapeFactory { @Override
+public Shape createShape(String shapeType) {
+if (shapeType.equalsIgnoreCase("CIRCLE")) { return new Circle();
+} else if (shapeType.equalsIgnoreCase("SQUARE")) { return new Square();
+} else if (shapeType.equalsIgnoreCase("RECTANGLE")) { return new Rectangle();
+}
+return null;
+}
+}
+ 
+// Concrete Factory: 3DShapeFactory (can create 3D shapes like Sphere, Cuboid, etc.)
+public class ThreeDShapeFactory implements ShapeFactory {
+// In this example, we are assuming that 3D shapes like Sphere and Cuboid could be created
+// But for simplicity, we will keep it similar to 2D factory structure. @Override
+public Shape createShape(String shapeType) {
+if (shapeType.equalsIgnoreCase("SPHERE")) {
+// Return a 3D shape like Sphere (for now, it's a placeholder). return new Circle(); // Just using Circle here as an example of
+a 3D object.
+} else if (shapeType.equalsIgnoreCase("CUBOID")) {
+// Return a 3D shape like Cuboid (for now, it's a placeholder). return new Square(); // Just using Square here as an example of
+a 3D object.
+}
+return null;
+}
+}
+
+5.	Client Code
+
+java
+Copy code
+public class AbstractFactoryPatternDemo { public static void main(String[] args) {
+// Create 2D Shape Factory
+ShapeFactory shapeFactory2D = new TwoDShapeFactory();
+
+// Create shapes using the 2D Shape Factory
+Shape shape1 = shapeFactory2D.createShape("CIRCLE"); shape1.draw();
+
+Shape shape2 = shapeFactory2D.createShape("SQUARE"); shape2.draw();
+
+Shape shape3 = shapeFactory2D.createShape("RECTANGLE"); shape3.draw();
+
+// Create 3D Shape Factory
+ShapeFactory shapeFactory3D = new ThreeDShapeFactory();
+
+// Create shapes using the 3D Shape Factory
+Shape shape4 = shapeFactory3D.createShape("SPHERE"); shape4.draw();
+
+Shape shape5 = shapeFactory3D.createShape("CUBOID"); shape5.draw();
+}
+}
+
+Explanation of the Code:
+ 
+1.	Shape Interface: This defines the draw() method that all concrete shapes (e.g., Circle, Square, Rectangle) must implement.
+2.	Concrete Shapes:
+o	Circle, Square, and Rectangle implement the Shape interface and provide their respective draw() method implementations.
+3.	Abstract Factory (ShapeFactory): This interface defines a createShape() method, which will be used by concrete factories to create specific shapes based on input.
+4.	Concrete Factories:
+o	TwoDShapeFactory is responsible for creating 2D shapes like Circle, Square, and Rectangle.
+o	ThreeDShapeFactory can be extended to create 3D shapes like Sphere and Cuboid (though for simplicity, we're using placeholders in this example).
+5.	Client Code: The client (in this case, AbstractFactoryPatternDemo) interacts with the abstract factories to create shapes. It can use the TwoDShapeFactory to create 2D shapes and ThreeDShapeFactory to create 3D shapes.
+
+
+
+Q.2	Write a program to get temperature notification using Arduino. #include <DHT.h>
+// Define the pin connected to the DHT sensor
+#define DHTPIN 2 // Pin where the DHT sensor data pin is connected
+
+// Define the sensor type (DHT11 or DHT22)
+#define DHTTYPE DHT11  // Use DHT11 or DHT22 depending on your sensor
+
+// Initialize the DHT sensor
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+// Start the serial communication Serial.begin(9600);
+
+// Initialize the DHT sensor dht.begin();
+
+Serial.println("Temperature Notification System Initialized");
+}
+
+void loop() {
+// Wait a few seconds between measurements delay(2000);
+ 
+// Read the temperature in Celsius float tempC = dht.readTemperature();
+
+// Check if the reading failed and exit early if (isnan(tempC)) {
+Serial.println("Failed to read from DHT sensor!"); return;
+}
+
+// Print the temperature to the Serial Monitor Serial.print("Current Temperature: "); Serial.print(tempC);
+Serial.println("°C");
+
+// If temperature is higher than a certain threshold, send notification if (tempC > 30.0) {
+Serial.println("Temperature is too high! Sending notification..."); sendTemperatureNotification(tempC);
+} else if (tempC < 10.0) {
+Serial.println("Temperature is too low! Sending notification..."); sendTemperatureNotification(tempC);
+}
+
+// Delay to prevent continuous checking delay(1000);
+}
+
+void sendTemperatureNotification(float temperature) {
+// Simulating sending a notification (you can integrate with email/SMS here) Serial.print("Notification: ");
+Serial.print("Temperature Alert! Current Temperature is "); Serial.print(temperature);
+Serial.println("°C");
+// You can integrate with services like IFTTT, email, or SMS here
+}
+
+
+
