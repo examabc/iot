@@ -1,0 +1,101 @@
+slip 1
+Q.1	Write a Java Program to implement I/O Decorator for converting uppercase letters to lower case letters
+
+
+
+import java.io.*;
+
+
+
+// Decorator class that converts uppercase letters to lowercase class LowerCaseInputStream extends InputStreamReader {
+private Reader reader;
+
+
+
+public LowerCaseInputStream(Reader reader) { super(reader);
+this.reader = reader;
+
+}
+ 
+@Override
+
+public int read() throws IOException { int data = reader.read();
+if (data == -1) {
+
+return -1; // End of stream
+
+}
+
+// Convert to lowercase if it's an uppercase letter return Character.toLowerCase((char) data);
+}
+
+
+
+@Override
+
+public int read(char[] cbuf, int off, int len) throws IOException { int numCharsRead = reader.read(cbuf, off, len);
+for (int i = off; i < off + numCharsRead; i++) { cbuf[i] = Character.toLowerCase(cbuf[i]);
+}
+
+return numCharsRead;
+
+}
+
+}
+
+
+
+public class IODecoratorExample { public static void main(String[] args) {
+try {
+ 
+// Wrapping System.in with a BufferedReader and then LowerCaseInputStream
+
+Reader reader = new LowerCaseInputStream(new BufferedReader(new InputStreamReader(System.in)));
+
+BufferedReader br = new BufferedReader(reader);
+
+
+
+System.out.println("Enter some text (uppercase will be converted to lowercase):");
+
+
+
+String line;
+
+while ((line = br.readLine()) != null) { System.out.println("Converted text: " + line);
+}
+
+} catch (IOException e) { e.printStackTrace();
+}
+
+}
+
+}
+
+
+
+Q.2	Write a program to sense the available networks using Arduino
+
+#include <WiFi.h> // For ESP32. For ESP8266, use <ESP8266WiFi.h> void setup() {
+// Start the serial communication to see the output Serial.begin(115200);
+
+// Connect to Wi-Fi (no credentials needed for scanning) WiFi.mode(WIFI_STA); // Set the Wi-Fi mode to station (client) Serial.println("Scanning for Wi-Fi networks...");
+ 
+// Start the scan for Wi-Fi networks
+int networkCount = WiFi.scanNetworks(); // This function returns the number of networks found
+
+Serial.println("Scan complete.");
+
+// If networks were found, print the list if (networkCount == 0) { Serial.println("No networks found.");
+} else { Serial.print(networkCount); Serial.println(" networks found:");
+for (int i = 0; i < networkCount; i++) {
+// Print the SSID (network name), RSSI (signal strength), and Encryption type Serial.print(i + 1);
+Serial.print(": ");
+Serial.print(WiFi.SSID(i));	// Network name (SSID) Serial.print(" | Signal Strength: "); Serial.print(WiFi.RSSI(i));	// Signal strength (in dBm) Serial.print(" dBm | Encryption: "); Serial.println(WiFi.encryptionType(i)); // Encryption type
+}
+}
+}
+
+void loop() {
+// Nothing to do here as we only need to scan once
+}
