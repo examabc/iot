@@ -1,0 +1,114 @@
+Slip 3 :
+
+Q.1 Write a JAVA Program to implement built-in support (java.util.Observable) Weather station with members temperature, humidity, pressure and methods mesurmentsChanged(), setMesurment(), getTemperature(), getHumidity(), getPressure()
+
+
+
+Code Implementation:
+
+1.	WeatherStation.java (Observable Class)
+
+java
+Copy code
+import java.util.Observable;
+ 
+public class WeatherStation extends Observable { private float temperature;
+private float humidity; private float pressure;
+
+// Method to notify observers when measurements change public void measurementsChanged() {
+setChanged(); // Marks the observable as changed notifyObservers(); // Notifies all observers
+}
+
+// Set new measurements and notify observers
+public void setMeasurements(float temperature, float humidity, float pressure) {
+this.temperature = temperature; this.humidity = humidity; this.pressure = pressure;
+measurementsChanged(); // Notify observers when new measurements are
+ 
+set
+ 
+
+}
+
+// Getters for weather measurements public float getTemperature() {
+return temperature;
+ 
+}
+
+public float getHumidity() { return humidity;
+}
+
+public float getPressure() { return pressure;
+}
+}
+
+2.	WeatherDisplay.java (Observer Class)
+
+java
+Copy code
+import java.util.Observable; import java.util.Observer;
+public class WeatherDisplay implements Observer { private float temperature;
+private float humidity;
+private float pressure;
+
+// Update method to receive notifications from the Observable @Override
+public void update(Observable o, Object arg) { if (o instanceof WeatherStation) {
+WeatherStation weatherStation = (WeatherStation) o; this.temperature = weatherStation.getTemperature(); this.humidity = weatherStation.getHumidity();
+ 
+this.pressure = weatherStation.getPressure(); display(); // Display the updated weather information
+}
+}
+
+// Display the updated weather information public void display() {
+System.out.println("Weather Data Updated: "); System.out.println("Temperature: " + temperature + "°C"); System.out.println("Humidity: " + humidity + "%"); System.out.println("Pressure: " + pressure + " hPa"); System.out.println("	");
+}
+}
+
+3.	Main.java (Testing the Program)
+
+java
+Copy code
+public class Main {
+public static void main(String[] args) {
+// Create a WeatherStation instance (Observable) WeatherStation weatherStation = new WeatherStation();
+
+// Create a WeatherDisplay instance (Observer) WeatherDisplay weatherDisplay = new WeatherDisplay();
+
+// Add the WeatherDisplay as an observer to the WeatherStation weatherStation.addObserver(weatherDisplay);
+
+// Simulate changing weather measurements weatherStation.setMeasurements(25.0f, 65.0f, 1013.0f); // Temp: 25°C,
+Humidity: 65%, Pressure: 1013 hPa
+weatherStation.setMeasurements(28.0f, 70.0f, 1010.0f); // Temp: 28°C,
+Humidity: 70%, Pressure: 1010 hPa
+weatherStation.setMeasurements(22.0f, 60.0f, 1020.0f); // Temp: 22°C, Humidity: 60%, Pressure: 1020 hPa
+}
+}
+
+
+Q.	2 Write a program to detects the vibration of an object with sensor using Arduino.
+
+// Define the pin for the vibration sensor
+const int vibrationPin = 7; // Pin connected to the OUT pin of the SW-420 sensor
+const int ledPin = 13;	// Pin connected to the LED
+
+void setup() {
+// Set vibration sensor pin as input pinMode(vibrationPin, INPUT);
+
+// Set the LED pin as output pinMode(ledPin, OUTPUT);
+ 
+// Start the serial communication for debugging Serial.begin(9600);
+}
+
+void loop() {
+// Read the state of the vibration sensor
+int vibrationState = digitalRead(vibrationPin);
+
+// Check if the sensor detects vibration (HIGH state) if (vibrationState == HIGH) {
+// If vibration is detected, turn on the LED digitalWrite(ledPin, HIGH); Serial.println("Vibration detected!");
+} else {
+// If no vibration, turn off the LED digitalWrite(ledPin, LOW); Serial.println("No vibration detected.");
+}
+
+// Small delay to debounce delay(100);
+}
+
+
